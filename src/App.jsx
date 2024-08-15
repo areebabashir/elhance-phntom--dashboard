@@ -7,7 +7,7 @@ import JoiningResponse from "./pages/JoiningResponse";
 import Sidebar from "./components/layout/Sidebar";
 import LoginPage from "./pages/Login";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
-import MessageDetail from './pages/MessageDetail';
+import MessageDetail from './pages/MessageDetail ';
 
 const App = () => {
   return (

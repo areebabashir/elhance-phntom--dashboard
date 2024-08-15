@@ -52,7 +52,7 @@ const JoiningResponse = () => {
       {/* Button for downloading Excel */}
       <button 
         onClick={downloadExcel}
-        className="absolute top-4 right-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+        className="absolute top-4 right-4 px-4 py-4 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600"
       >
         Download Responses as Excel
       </button>
@@ -62,11 +62,11 @@ const JoiningResponse = () => {
         <div key={response._id} className="bg-white p-6 border border-gray-200 rounded-lg shadow-lg relative">
           <button
             onClick={() => handleDelete(response._id)}
-            className="absolute top-2 right-2 px-2 py-1 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600"
+            className="absolute top-3 right-2 px-3 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600"
           >
             Delete
           </button>
-          <h2 className="text-2xl font-semibold mb-4">{response.name}</h2>
+          <h2 className="text-3xl font-semibold mb-4">{response.name}</h2>
           <p><strong>Selected Option:</strong> {response.selectedOption}</p>
           <p><strong>Email:</strong> {response.email}</p>
           <p><strong>Whatsapp:</strong> {response.whatsapp}</p>

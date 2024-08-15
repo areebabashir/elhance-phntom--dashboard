@@ -7,7 +7,6 @@ import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import Skeleton from 'react-loading-skeleton';
 import { GiPartyPopper, GiReceiveMoney } from 'react-icons/gi';
 
-// Registering Chart.js components
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
 const Dashboard = () => {
@@ -30,10 +29,9 @@ const Dashboard = () => {
     ],
   });
 
-  const notificationSoundUrl = 'public/abc.mp3';
+  const notificationSoundUrl = '/abc.mp3'; // Ensure the correct path to your mp3 file
   const [playSound, setPlaySound] = useState(false);
 
-  // Fetching data
   const fetchData = async () => {
     try {
       const eventsResponse = await axios.get('http://localhost:8000/api/v1/event/all-events');
@@ -63,17 +61,15 @@ const Dashboard = () => {
     }
   };
 
-  // Fetch data initially and set up intervals
   useEffect(() => {
     fetchData();
     const intervalId = setInterval(() => {
       fetchData();
-    }, 60000); // Fetch data every 60 seconds
+    }, 60000);
 
     return () => clearInterval(intervalId);
   }, []);
 
-  // Check for updates
   useEffect(() => {
     const checkForUpdates = async () => {
       try {
@@ -102,21 +98,19 @@ const Dashboard = () => {
 
     const intervalId = setInterval(() => {
       checkForUpdates();
-    }, 30000); // Check for updates every 30 seconds
+    }, 30000);
 
     return () => clearInterval(intervalId);
   }, [totalResponses, newMessages]);
 
-  // Play notification sound
   useEffect(() => {
     if (playSound) {
       const audio = new Audio(notificationSoundUrl);
-      audio.play();
+      audio.play().catch(error => console.error('Error playing sound:', error));
       setPlaySound(false);
     }
   }, [playSound]);
 
-  // Toggle notification popup
   const handleIconClick = () => {
     setIsPopupVisible(!isPopupVisible);
   };
@@ -131,10 +125,9 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 flex flex-col space-y-6 relative bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300">
-      {/* Notification icon */}
       <div className="relative">
         <FaBell
-          className="text-2xl cursor-pointer fixed top-4  right-12"
+          className="text-2xl cursor-pointer fixed top-4 right-12"
           onClick={handleIconClick}
           aria-label="Notifications"
         />
@@ -159,31 +152,29 @@ const Dashboard = () => {
             <span
               className="absolute h-full w-full rounded-full ring-2 ring-white bg-red-400 animate-ping"
             ></span>
+            <span
+              className="relative inline-flex rounded-full h-3 w-3 bg-red-500"
+            ></span>
           </div>
         )}
       </div>
 
-      {/* Welcome message */}
-      <div className="bg-white p-4 rounded-lg shadow-lg mb-6 ">
+      <div className="bg-white p-4 rounded-lg shadow-lg mb-6">
         <h2 className="text-xl font-semibold mb-2">Welcome back, Admin!</h2>
         <p className="text-lg">Here's an overview of the latest stats and updates.</p>
       </div>
 
-      {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {/* Total Events */}
         <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center transform transition-transform duration-300 hover:scale-105">
           <GiPartyPopper className="text-4xl mb-2" />
           <h2 className="text-xl font-semibold mb-2">Total Events</h2>
           {loading ? <Skeleton height={40} width={100} /> : <p className="text-4xl font-bold">{totalEvents}</p>}
         </div>
-        {/* Total Responses */}
         <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center transform transition-transform duration-300 hover:scale-105">
           <GiReceiveMoney className="text-4xl mb-2" />
           <h2 className="text-xl font-semibold mb-2">Total Responses</h2>
           {loading ? <Skeleton height={40} width={100} /> : <p className="text-4xl font-bold">{totalResponses}</p>}
         </div>
-        {/* New Messages */}
         <div className="bg-red-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center transform transition-transform duration-300 hover:scale-105">
           <FaEnvelope className="text-4xl mb-2" />
           <h2 className="text-xl font-semibold mb-2">Total Messages</h2>
@@ -191,9 +182,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Traffic Pie Chart and Quick Actions */}
       <div className="mt-8 space-y-6 flex md:flex-row flex-col gap-6">
-        {/* Traffic Pie Chart */}
         <div className="bg-white p-6 rounded-lg shadow-lg flex-1">
           <h2 className="text-xl font-semibold mb-4">Traffic Statistics</h2>
           <div className="w-full flex justify-center">
@@ -202,7 +191,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        {/* Quick Actions */}
         <div className="bg-blue-100 p-6 rounded-lg shadow-lg flex-1">
           <h2 className="text-2xl font-semibold mb-4 text-center">Quick Actions</h2>
           <div className="flex flex-wrap gap-4 justify-center pt-10">
@@ -213,7 +201,7 @@ const Dashboard = () => {
               Create Event
             </Link>
             <Link
-              to="/joining-response"
+              to="/joining-form"
               className="bg-green-500 text-white rounded-lg p-4 hover:bg-green-600 transition duration-300 ease-in-out text-lg transform hover:scale-105"
             >
               View Responses
@@ -222,7 +210,7 @@ const Dashboard = () => {
               to="/messages"
               className="bg-red-500 text-white rounded-lg p-4 hover:bg-red-600 transition duration-300 ease-in-out text-lg transform hover:scale-105"
             >
-              Messages
+              View Messages
             </Link>
           </div>
         </div>

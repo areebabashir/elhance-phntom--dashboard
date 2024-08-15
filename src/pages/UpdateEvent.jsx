@@ -14,8 +14,8 @@ const UpdateEvent = ({ event, closeModal }) => {
   });
 
   const [fileNames, setFileNames] = useState({
-    eventPhoto: '',
-    speakerPhoto: ''
+    eventPhoto: event.eventPhoto ? 'Current image' : '',
+    speakerPhoto: event.speakerPhoto ? 'Current image' : ''
   });
 
   const handleInputChange = (e) => {
@@ -30,37 +30,30 @@ const UpdateEvent = ({ event, closeModal }) => {
     const { id } = e.target;
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormValues((prevValues) => ({
-          ...prevValues,
-          [id]: reader.result,
-        }));
-        setFileNames((prevNames) => ({
-          ...prevNames,
-          [id]: file.name,
-        }));
-      };
-      reader.readAsDataURL(file);
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [id]: file,
+      }));
+      setFileNames((prevNames) => ({
+        ...prevNames,
+        [id]: file.name,
+      }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formValues);
-    console.log(fileNames);
-
     const formData = new FormData();
     formData.append('eventTitle', formValues.eventTitle);
     formData.append('eventDescription', formValues.eventDescription);
     formData.append('speakerName', formValues.speakerName);
     formData.append('aboutSpeaker', formValues.aboutSpeaker);
 
-    if (formValues.eventPhoto && fileNames.eventPhoto) {
+    if (formValues.eventPhoto && fileNames.eventPhoto !== 'Current image') {
       formData.append('eventPhoto', formValues.eventPhoto);
     }
 
-    if (formValues.speakerPhoto && fileNames.speakerPhoto) {
+    if (formValues.speakerPhoto && fileNames.speakerPhoto !== 'Current image') {
       formData.append('speakerPhoto', formValues.speakerPhoto);
     }
 
@@ -72,10 +65,9 @@ const UpdateEvent = ({ event, closeModal }) => {
       });
 
       toast.success('Event updated successfully!');
-      // setTimeout(() => {
-      //   window.location.reload();
-      //   closeModal();
-      // }, 2000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       console.error('Error updating event:', error);
       toast.error('Error updating event');
@@ -89,6 +81,9 @@ const UpdateEvent = ({ event, closeModal }) => {
 
         <div className="mb-4">
           <label htmlFor="eventPhoto" className="block text-gray-700 mb-2">Event Image:</label>
+          {formValues.eventPhoto && fileNames.eventPhoto === 'Current image' && (
+            <img src={`http://localhost:8000/${formValues.eventPhoto}`} alt="Current Event" className="mb-2 w-20 object-cover h-20 rounded-lg" />
+          )}
           <input
             type="file"
             id="eventPhoto"
@@ -122,6 +117,9 @@ const UpdateEvent = ({ event, closeModal }) => {
 
         <div className="mb-4">
           <label htmlFor="speakerPhoto" className="block text-gray-700 mb-2">Speaker Image:</label>
+          {formValues.speakerPhoto && fileNames.speakerPhoto === 'Current image' && (
+            <img src={`http://localhost:8000/${formValues.speakerPhoto}`} alt="Current Speaker" className="mb-2 w-20 object-cover h-20 rounded-lg" />
+          )}
           <input
             type="file"
             id="speakerPhoto"
