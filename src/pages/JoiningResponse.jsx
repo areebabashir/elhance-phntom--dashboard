@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios'; 
+import axios from 'axios';
 import * as XLSX from 'xlsx'; // Import xlsx library
 
 const JoiningResponse = () => {
@@ -11,7 +11,7 @@ const JoiningResponse = () => {
     // Function to fetch data
     const fetchResponses = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/form/all-responses'); 
+        const response = await axios.get('http://localhost:8000/api/v1/form/all-responses');
         setResponses(response.data);
       } catch (err) {
         setError(err.message);
@@ -35,6 +35,15 @@ const JoiningResponse = () => {
     XLSX.writeFile(wb, 'responses.xlsx');
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/v1/form/responses/${id}`);
+      setResponses(prevResponses => prevResponses.filter(response => response._id !== id));
+    } catch (err) {
+      console.error('Error deleting response:', err);
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -49,8 +58,14 @@ const JoiningResponse = () => {
       </button>
       
       {/* Display responses */}
-      {responses.map((response, index) => (
-        <div key={index} className="bg-white p-6 border border-gray-200 rounded-lg shadow-lg">
+      {responses.map((response) => (
+        <div key={response._id} className="bg-white p-6 border border-gray-200 rounded-lg shadow-lg relative">
+          <button
+            onClick={() => handleDelete(response._id)}
+            className="absolute top-2 right-2 px-2 py-1 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600"
+          >
+            Delete
+          </button>
           <h2 className="text-2xl font-semibold mb-4">{response.name}</h2>
           <p><strong>Selected Option:</strong> {response.selectedOption}</p>
           <p><strong>Email:</strong> {response.email}</p>
