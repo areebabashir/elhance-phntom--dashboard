@@ -201,7 +201,7 @@ const Dashboard = () => {
               Create Event
             </Link>
             <Link
-              to="/joining-form"
+              to="/joining-response"
               className="bg-green-500 text-white rounded-lg p-4 hover:bg-green-600 transition duration-300 ease-in-out text-lg transform hover:scale-105"
             >
               View Responses
